@@ -233,7 +233,7 @@ export const TournamentProvider = ({ children }: { children: ReactNode }) => {
           reward: 0, secured: prev.securedReward, bet: prev.activeWager,
           round: prev.stage, playerName: prev.playerName, teamName: prev.teamName
         };
-      } else if (revealedCount === 9 && nextStatus !== 'ROUND_LOSS') {
+      } else if (revealedCount === 9) {
         // Full board jackpot
         nextStatus = 'ROUND_WIN';
         soundManager.play('win');

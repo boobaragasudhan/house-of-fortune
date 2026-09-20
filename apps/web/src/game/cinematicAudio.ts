@@ -30,7 +30,7 @@ class CinematicAudioManager {
   };
   private masterVolume = 0.5;
   private activeNodes: ActiveNode[] = [];
-  private hasPlayedIntro = false;
+  private stopped = false;
 
   init(): boolean {
     if (this.ctx) return true;
@@ -109,7 +109,6 @@ class CinematicAudioManager {
     if (this.ctx.state === 'suspended') this.ctx.resume();
     this.stopped = false;
     const t = this.ctx.currentTime + 0.05;
-    this.introStartTime = t;
 
     // ════════════════════════════════════════════
     // MUSIC — Progressive build over 10 seconds
