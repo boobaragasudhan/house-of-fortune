@@ -1,0 +1,9 @@
+{
+  "name": "@hof/game-engine",
+  "version": "1.0.0",
+  "main": "src/cardEngine.ts",
+  "types": "src/cardEngine.ts",
+  "dependencies": {
+    "@hof/shared": "*"
+  }
+}

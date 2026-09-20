@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(uuid())
+  username        String   @unique
+  email           String   @unique
+  passwordHash    String
+  avatarUrl       String?
+  virtualCredits  Int      @default(0)
+  tournamentWins  Int      @default(0)
+  gamesPlayed     Int      @default(0)
+  highestRound    Int      @default(0)
+  
+  wallets         Wallet[]
+  transactions    WalletTransaction[]
+  sessions        GameSession[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Wallet {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  
+  available       Int      @default(0)
+  locked          Int      @default(0)
+  secured         Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum TransactionType {
+  DEPOSIT_SANDBOX
+  TOURNAMENT_ENTRY
+  BET
+  WIN
+  REFUND
+  SECURE_REWARD
+  CASH_OUT_VIRTUAL
+  BONUS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+model WalletTransaction {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  
+  type            TransactionType
+  amount          Int
+  status          TransactionStatus @default(COMPLETED)
+  referenceId     String?   // ID of the bet, tournament, or payment
+  
+  createdAt       DateTime @default(now())
+}
+
+model Tournament {
+  id              String   @id @default(uuid())
+  name            String
+  entryFee        Int
+  prizePool       Int
+  status          String   @default("WAITING") // WAITING, IN_PROGRESS, COMPLETED
+  
+  players         TournamentPlayer[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model TournamentPlayer {
+  id              String   @id @default(uuid())
+  tournamentId    String
+  userId          String
+  
+  tournament      Tournament @relation(fields: [tournamentId], references: [id])
+  
+  seat            Int
+  status          String   @default("PLAYING") // PLAYING, ELIMINATED, CASHED_OUT, CHAMPION
+  currentRound    Int      @default(1)
+  securedReward   Int      @default(0)
+  
+  createdAt       DateTime @default(now())
+  
+  @@unique([tournamentId, userId])
+}
+
+model GameSession {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  
+  gameType        String   // e.g. "HOUSE_OF_FORTUNE", "BLACKJACK"
+  tournamentId    String?
+  roundId         String?
+  
+  status          String   @default("ACTIVE") // ACTIVE, COMPLETED, ABORTED
+  result          String?  // JSON representation of result
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

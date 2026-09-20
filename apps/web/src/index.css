@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+  
+  --color-casino-black: #090909;
+  --color-casino-green: #063B2A;
+  --color-casino-gold: #D4AF37;
+  --color-casino-cream: #F5F0E6;
+  --color-casino-red: #8B1E1E;
+}
+
+body {
+  @apply bg-[#090909] text-[#F5F0E6] font-sans antialiased;
+  /* Extremely subtle noise/felt texture */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* The Game Table Environment */
+.casino-table-bg {
+  @apply bg-gradient-to-b from-[#0a4d38] to-[#063B2A] relative overflow-hidden;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+}
+.casino-table-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.gold-text {
+  @apply text-[#D4AF37] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)];
+}
+
+.serif-heading {
+  @apply font-cinzel tracking-wider;
+}
+
+.premium-btn {
+  @apply px-8 py-3 bg-[#063B2A] border border-[#D4AF37] text-[#F5F0E6] font-semibold text-sm tracking-widest uppercase rounded shadow-[0_4px_15px_rgba(0,0,0,0.5)] transition-all;
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-btn:hover:not(:disabled) {
+  @apply bg-[#084b36] shadow-[0_6px_20px_rgba(0,0,0,0.6)] -translate-y-[1px];
+  box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2), 0 6px 20px rgba(0,0,0,0.6);
+}
+
+.premium-btn:active:not(:disabled) {
+  @apply translate-y-0 scale-[0.98];
+}
+
+.premium-btn:disabled {
+  @apply opacity-50 cursor-not-allowed border-[#555] text-[#888] shadow-none;
+}
+
+/* Playing Card styling */
+.playing-card-container {
+  perspective: 1000px;
+}
+.playing-card-inner {
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+.playing-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.playing-card-front, .playing-card-back {
+  backface-visibility: hidden;
+}
+.playing-card-front {
+  transform: rotateY(180deg);
+}
+.playing-card {
+  @apply bg-[#F5F0E6] border border-[#cbd5e1] rounded-lg shadow-[2px_4px_10px_rgba(0,0,0,0.5)] flex flex-col items-center justify-between p-2;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 2px 4px 10px rgba(0,0,0,0.5);
+}
+.casino-card-back {
+  @apply bg-[#8B1E1E] rounded-lg border-2 border-[#F5F0E6] flex items-center justify-center p-2 relative shadow-[2px_4px_10px_rgba(0,0,0,0.5)];
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 20px);
+}
+.casino-card-back::after {
+  content: "HF";
+  @apply absolute font-cinzel text-[#D4AF37] text-2xl font-bold opacity-80;
+}
+.playing-card-red {
+  @apply text-[#8B1E1E];
+}
+.playing-card-black {
+  @apply text-[#090909];
+}
+
+/* Chips */
+.casino-chip {
+  @apply rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm shadow-[0_4px_6px_rgba(0,0,0,0.5)] border-4 transition-transform cursor-pointer;
+  position: relative;
+}
+.casino-chip::before {
+  content: "";
+  @apply absolute inset-1 rounded-full border-2 border-dashed opacity-50 pointer-events-none;
+}
+.chip-placed {
+  @apply shadow-[0_2px_4px_rgba(0,0,0,0.8)] scale-90;
+}
+
+/* Betting Zone */
+.betting-zone {
+  @apply border-2 border-dashed border-white/20 rounded-full w-16 h-16 flex items-center justify-center transition-colors;
+}
+.betting-zone:hover {
+  @apply border-white/40 bg-white/5;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090909;
+}
+::-webkit-scrollbar-thumb {
+  background: #063B2A;
+  border: 1px solid #D4AF37;
+}

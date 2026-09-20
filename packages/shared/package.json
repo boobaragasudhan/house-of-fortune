@@ -1,0 +1,6 @@
+{
+  "name": "@hof/shared",
+  "version": "1.0.0",
+  "main": "src/gameTypes.ts",
+  "types": "src/gameTypes.ts"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@hof/database",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.4.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.4.2",
+    "typescript": "^5.2.2"
+  }
+}
